@@ -1,22 +1,26 @@
 function climbingLeaderboard(scores, alice) {
-  // build new leaderboard
-  // this includes every int between the top score and 0
-  let leaderboard = {};
-  let rank = 1;
-  for (let i = scores[0]; i >= 0; i--) {
-    leaderboard[i.toString()] = rank;
-    if (scores.includes(i)) {
-      rank++;
-    }
-  }
-  // check alice's ranks
+  let scoresIndex = 0;
+  let aliceIndex = alice.length - 1;
   let aliceRank = [];
-  for (let i = 0; i < alice.length; i++) {
-    if (!leaderboard[alice[i].toString()]) {
-      aliceRank.push(1);
+  let rank = 1;
+  let currentTopScore = scores[scoresIndex];
+  while (aliceIndex >= 0) {
+    if (alice[aliceIndex] >= scores[scoresIndex]) {
+      aliceRank.unshift(rank);
+      aliceIndex--;
+    }
+    else if (scoresIndex === scores.length) {
+      rank++;
+      scoresIndex++;
+      aliceRank.unshift(rank);
+      aliceIndex--;
     }
     else {
-      aliceRank.push(leaderboard[alice[i].toString()]);
+      scoresIndex++;
+      if (currentTopScore > scores[scoresIndex]) {
+        rank++
+        currentTopScore = scores[scoresIndex];
+      }
     }
   }
   return aliceRank;
